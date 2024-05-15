@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
-import data from "../data";
+import { people } from "../data";
 // import cloudinary from "../middleware/cloudinary";
 // import { UploadedFile } from "express-fileupload";
 import { Person } from "../types";
 
 const getPeople = (req: Request, res: Response): void => {
-  res.status(200).json(data);
+  res.status(200).json(people);
 };
 
 const getPeopleById = (req: Request, res: Response): void => {
   const { id } = req.params;
   const newId = +id;
-  const person: Person | undefined = data.find((person) => person.id === newId);
+  const person: Person | undefined = people.find(
+    (person) => person.id === newId
+  );
   if (person) {
     res.status(200).json(person);
   } else {
@@ -28,7 +30,7 @@ const addPeople = (req: Request, res: Response): void => {
     username,
     email,
   };
-  data.push(newPerson);
+  people.push(newPerson);
   res.status(201).json(newPerson);
 };
 
@@ -36,7 +38,9 @@ const updatePeople = (req: Request, res: Response): void => {
   const { id } = req.params;
   const newId = +id;
   const { name, username, email } = req.body;
-  const person: Person | undefined = data.find((person) => person.id === newId);
+  const person: Person | undefined = people.find(
+    (person) => person.id === newId
+  );
   if (person) {
     person.name = name;
     person.username = username;
@@ -50,9 +54,11 @@ const updatePeople = (req: Request, res: Response): void => {
 const deletePeople = (req: Request, res: Response): void => {
   const { id } = req.params;
   const newId = +id;
-  const person: Person | undefined = data.find((person) => person.id === newId);
+  const person: Person | undefined = people.find(
+    (person) => person.id === newId
+  );
   if (person) {
-    data.splice(data.indexOf(person), 1);
+    people.splice(people.indexOf(person), 1);
     res.status(200).json({ message: "Person deleted" });
   } else {
     res.status(404).json({ message: "Person not found" });
@@ -78,7 +84,7 @@ const deletePeople = (req: Request, res: Response): void => {
 //     return;
 //   }
 //   const fileBase64: string = (req.file as UploadedFile).buffer.toString("base64");
-//   const file: string = `data:${(req.file as UploadedFile).mimetype};base64,${fileBase64}`;
+//   const file: string = `people:${(req.file as UploadedFile).mimetype};base64,${fileBase64}`;
 
 //   cloudinary.uploader.upload(file, (error: any, result: any) => {
 //     if (error) {
